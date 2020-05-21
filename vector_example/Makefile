@@ -23,8 +23,6 @@ $(PROD): $(SRCS:.c=.o)
 clean:
 	-rm $(PROD) $(SRCS:.c=.o) $(TDIR)/*
 
-.PRECIOUS: $(TDIR)/*
-
 include $(TDIR)/$(SRCS:.c=.d)
 
 $(TDIR)/%.t.o: $(TDIR)/%.t.c $(TDIR)/%.t.h
