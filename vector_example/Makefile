@@ -3,34 +3,39 @@ CARG = -c -Wall -Werror -Wextra -ansi -pedantic -std=c11 -g -Og
 LARG =
 PROD = example
 SRCS = main.c
-ODIR = objs
+TDIR = templates
 
 .PHONY: all clean
 
+#.SECONDARY: #uncomment this to prevent make from removing the source code of the instantiated templates
+
 all: $(PROD)
 
-$(PROD): $(ODIR)/$(SRCS:.c=.o)
-	$(COMP) -o $@ $(ODIR)/*.o $(LARG)
+$(PROD): $(SRCS:.c=.o)
+	$(COMP) -o $@ $^ $(TDIR)/*.o $(LARG)
 
-$(ODIR)/%.o: %.c
+%.o: %.c
 	$(COMP) -o $@ $< $(CARG)
 
-%(ODIR)/%.o: %.c %.h
+%.o: %.c %.h
 	$(COMP) -o $@ $< $(CARG)
 
 clean:
-	-rm $(PROD) $(ODIR)/*
+	-rm $(PROD) $(SRCS:.c=.o) $(TDIR)/*
 
-include $(ODIR)/$(SRCS:.c=.d)
+.PRECIOUS: $(TDIR)/*
 
-$(ODIR)/%.d: %.c
-	@set -e; rm -f $@; \
-         $(COMP) -MM -MG $(CARG) $< > $@.$$$$; \
-         sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
-         rm -f $@.$$$$
+include $(TDIR)/$(SRCS:.c=.d)
 
-$(ODIR)/vector.%.c $(ODIR)/vector.%.h $(ODIR)/vector.%.o:
-	sed -e 's/TYPE/$*/g' vector.TYPE.c > $(ODIR)/vector.$*.c
-	sed -e 's/TYPE/$*/g' vector.TYPE.h > $(ODIR)/vector.$*.h
-	$(COMP) -o $(ODIR)/vector.$*.o $(ODIR)/vector.$*.c $(CARG)
+$(TDIR)/%.t.o: $(TDIR)/%.t.c $(TDIR)/%.t.h
+	$(COMP) -o $@ $< $(CARG)
 
+$(TDIR)/vector.%.t.h: vector.TYPE.h
+	sed -e 's/TYPE/$*/g' $^ > $@
+
+$(TDIR)/vector.%.t.c: vector.TYPE.c
+	sed -e 's/TYPE/$*/g' $< > $@
+
+$(TDIR)/%.d: %.c
+	$(COMP) -MM -MG $(CARG) $< > $@
+	sed -i.junk -e 's/\.t\.[hc]/\.t\.o/g' $@
