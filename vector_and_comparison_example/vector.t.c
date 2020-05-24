@@ -1,5 +1,4 @@
-#include "vector.TYPE.t.h"
-
+#include <stdlib.h>
 typedef struct Vector_TYPE
 {
 	size_t size,capacity;

@@ -1,4 +1,5 @@
-#include "templates/vector.int.t.h"
+#include "templates/vector.TYPE%int.t.h"
+#include "templates/less.T%int.S%float.t.h"
 #include <stdio.h>
 
 int main(void)
@@ -9,5 +10,8 @@ int main(void)
 	for(size_t i=0; i < vector_int_get_size(myVec); ++i)
 		printf("%d\n",*vector_int_at(myVec,i));
 	vector_int_destroy(&myVec);
+
+	puts(less_int_float(1,0.5f)?"less":"not less");
+	puts(less_int_float(0,0.5f)?"less":"not less");
 	return 0;
 }
