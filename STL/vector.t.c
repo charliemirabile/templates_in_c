@@ -22,6 +22,18 @@ Vector_TYPE *vector_TYPE_init_default(void)
 	return pVec;
 }
 
+Vector_TYPE *vector_TYPE_create_dummy(void)
+{
+	return calloc(sizeof(Vector_TYPE),1);
+}
+
+void vector_TYPE_destroy(Vector_TYPE **ppVec)
+{
+	free((*ppVec)->data);
+	free(*ppVec);
+	*ppVec=NULL;
+}
+
 size_t vector_TYPE_get_size(Vector_TYPE *pVec)
 {
 	return pVec->size;
@@ -32,15 +44,10 @@ size_t vector_TYPE_get_capacity(Vector_TYPE *pVec)
 	return pVec->capacity;
 }
 
-void vector_TYPE_destroy(Vector_TYPE **ppVec)
-{
-	free((*ppVec)->data);
-	free(*ppVec);
-	*ppVec=NULL;
-}
-
 _Bool vector_TYPE_push_back(Vector_TYPE *pVec, TYPE item)
 {
+	if(pVec->data==NULL)
+		return 0;
 	TYPE *temp;
 	if(pVec->size >= pVec->capacity)
 	{
