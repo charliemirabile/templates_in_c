@@ -1,5 +1,5 @@
-#include "templates/vector.TYPE%int.t.h"
-#include "templates/less.T%int.S%float.t.h"
+#include "templates/vector.int@TYPE.t.h"
+#include "templates/less.int@T.float@S.t.h"
 #include <stdio.h>
 
 int main(void)
