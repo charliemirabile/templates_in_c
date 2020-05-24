@@ -29,12 +29,12 @@ $(TDIR)/%.t.o: $(TDIR)/%.t.c $(TDIR)/%.t.h
 	$(COMP) -o $@ $< $(CARG)
 
 $(TDIR)/%t.c:
-	echo $@ | sed -r "s,^$(TDIR)/([^\.]*)\.(.*)(t\.c)$$,cp \1\.\3 $@\n,g" > $@.cmds
+	echo $@ | sed -r "s,^$(TDIR)/([^\.]*)\.(.*)(t\.c)$$,cp \./*/\1\.\3 $@\n,g" > $@.cmds
 	echo $@ | sed -r "s,^$(TDIR)/([^\.]*)\.(.*)(t\.c)$$,\2,g" |\
 	sed -r "s,([^%\.]*)@([^%\.]*)\.,sed -i.junk -r s/\2/\1/g $@ \n,g" >> $@.cmds
 	cat $@.cmds | while read line; do $$line; done
 $(TDIR)/%t.h:
-	echo $@ | sed -r "s,^$(TDIR)/([^\.]*)\.(.*)(t\.h)$$,cp \1\.\3 $@\n,g" > $@.cmds
+	echo $@ | sed -r "s,^$(TDIR)/([^\.]*)\.(.*)(t\.h)$$,cp \./*/\1\.\3 $@\n,g" > $@.cmds
 	echo $@ | sed -r "s,^$(TDIR)/([^\.]*)\.(.*)(t\.h)$$,\2,g" |\
 	sed -r "s,([^%\.]*)@([^%\.]*)\.,sed -i.junk -r s/\2/\1/g $@ \n,g" >> $@.cmds
 	cat $@.cmds | while read line; do $$line; done
